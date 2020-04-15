@@ -1,0 +1,213 @@
+<div id="card-service" class="card-body">
+    <div style="padding: 0;" class="card-body">
+        <div style="cursor: pointer;border-bottom: 1px solid black;" class="card-title">
+            <span (click)="volver()">
+                <i style="padding-left:10px;" class="fas fa-arrow-left"></i>
+                Solicitudes / Servicios
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5" style="display: -webkit-inline-box;">
+            <label style="padding-top: 5px;" class="checkbox checkbox-primary">
+                <input [(ngModel)]="paginacionGrid" type="checkbox" checked>
+                <span>Paginación</span>
+                <span style="top: auto !important;background-color: #0B86CA !important;" class="checkmark"></span>
+            </label>
+            <button style="margin-left: 10px;" type="button" class="btn btn-outline-lims btn-rounded"
+                ngbPopover="Para enviar los servicios a facturar, debe seleccionar las filas que quiera facturar."
+                triggers="mouseenter:mouseleave">
+                <i class="fas fa-info"></i>
+            </button>
+        </div>
+        <div class="col-md-4">
+            <div *ngIf="this.selectedItemKeys.length > 0" class="container" style="font-size: 15px;">
+                <div class="text-center">Se han seleccionado {{this.selectedItemKeys.length}} solicitudes de
+                    {{this.facturacion.listaDetalles.length}}</div>
+                <div class="text-center">
+                    <label class="checkbox checkbox-primary">
+                        <input (change)="cambioSeleccion()" [(ngModel)]="seleccionGridBool" type="checkbox">
+                        <span>Seleccionar todas </span>
+                        <span class="checkmark seleccion"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="celdaSolicitudes" #celdaSolicitudes class="row">
+        <div *ngIf="cambiaEstado" class="col-md-12">
+            <dx-data-grid #grid1 [ngStyle]="{'height':alturaReferencia}" id="gridContainer"
+                [dataSource]="facturacion.listaDetalles" [showColumnLines]="true" [showRowLines]="true"
+                [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="false"
+                [allowColumnResizing]="true" [wordWrapEnabled]="true" [allowColumnReordering]="true"
+                (onSelectionChanged)="onSelectionChanged1($event)" (onRowPrepared)="onRowPrepared($event)"
+                (onCellClick)="onCellClick($event)" (onEditorPreparing)="onEditorPreparing($event)"
+                (onOptionChanged)="onOptionChanged($event)" (onToolbarPreparing)="onToolbarPreparing($event)"
+                (onRowUpdated)="onRowUpdated($event)" (onInitialized)="onInitialized($event)"
+                (onCellPrepared)="onCellPrepared($event)" (onEditingStart)="onEditingStart($event)">
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+                <dxo-editing mode="batch" [allowUpdating]="true" [allowAdding]="true" [selectTextOnEditStart]="false">
+                </dxo-editing>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="false"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                <dxo-paging [enabled]="paginacionGrid" [pageSize]="100"></dxo-paging>
+                <dxo-pager [showInfo]="true"></dxo-pager>
+                <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                <dxo-selection [selectAllMode]="seleccionGrid" mode="multiple">
+                </dxo-selection>
+                <dxo-state-storing [enabled]="true" type="sessionStorage" [storageKey]="serviciosGrid" type="custom"
+                    [customLoad]="customLoad" [customSave]="customSave"></dxo-state-storing>
+
+                <dxi-column [allowEditing]="false" [allowSorting]="true" visible="false" dataField="solicitud"
+                    caption="Solicitud" alignment="center">
+                </dxi-column>
+                <dxi-column [allowEditing]="false" [sortOrder]="orientacion" [allowSorting]="true"
+                    dataField="servicio_nombre" caption="Codigo servicio">
+                </dxi-column>
+                <dxi-column [allowSorting]="true" dataField="servicio_descripcion" caption="Descripción"
+                    alignment="center" editCellTemplate="observacionesCellTemplate">
+                </dxi-column>
+                <dxi-column [allowSorting]="true" dataField="observaciones" caption="Observaciones" alignment="center">
+                </dxi-column>
+
+                <dxi-column [allowSorting]="true" dataField="tipo_facturacion" caption="Tipo de facturación"
+                    alignment="center">
+                    <dxo-lookup [dataSource]="tiposFacturacion" pageLoadMode="nextButton" nextButtonText="More"
+                        displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+                </dxi-column>
+
+                <dxi-column [width]="200" [allowEditing]="false" [allowSorting]="true" dataField="cliente"
+                    caption="Cliente a facturar" alignment="center">
+                    <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More"
+                        displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+                </dxi-column>
+                <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cantidad" caption="Cantidad"
+                    alignment="center"></dxi-column>
+                <dxi-column [allowSorting]="true" dataField="precio_unidad" caption="Precio unidad (€)"
+                    alignment="center">
+                </dxi-column>
+                <dxi-column [allowEditing]="false" [calculateCellValue]="calculateCellValue"
+                    cellTemplate="totalCellTemplate" caption="Total (€)" alignment="center" dataField="total">
+
+                </dxi-column>
+                <dxi-column [allowSorting]="true" dataField="no_facturar" dataType="boolean" caption="No Facturar"
+                    alignment="center">
+                </dxi-column>
+                <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="bool_facturacion"
+                    caption="Facturada" alignment="center" cellTemplate="facturadaCellTemplate">
+                </dxi-column>
+                <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="tabla" caption="Servicio Nuevo"
+                    alignment="center" cellTemplate="servicioCellTemplate">
+                </dxi-column>
+                <div *dxTemplate="let data of 'servicioCellTemplate'">
+                    <span *ngIf="data.data.tabla === 'nueva' && data.data.posicion === 0"><i
+                            style="color: green;font-size: 20px;" class="fas fa-circle"></i></span>
+                </div>
+                <div *dxTemplate="let data of 'observacionesCellTemplate'">
+                    <dx-text-area [autoResizeEnabled]="true" [minHeight]="100" [maxLength]="500"
+                        [(value)]="data.data.servicio_descripcion" (onValueChanged)="setEditedValue($event, data)">
+                    </dx-text-area>
+                </div>
+                <div *dxTemplate="let data of 'totalCellTemplate'">
+                    {{data.data.total}} €
+                </div>
+                <div *dxTemplate="let data of 'sinfacturarCellTemplate'">
+                    <dx-check-box [disabled]="data.data.bool_facturacion" [value]="data.data.no_facturar">
+                    </dx-check-box>
+                </div>
+                <div *dxTemplate="let data of 'facturadaCellTemplate'">
+                    <span *ngIf="data.data.bool_facturacion"> <i style="color: green;font-size: 20px;"
+                            class="fas fa-check"></i></span>
+                </div>
+                <dxo-summary [recalculateWhileEditing]="true">
+                    <dxi-total-item column="solicitud" summaryType="count">
+                    </dxi-total-item>
+                    <dxi-total-item column="total" [customizeText]="customizeText" summaryType="sum"
+                        valueFormat="#.##0,##">
+                    </dxi-total-item>
+                </dxo-summary>
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+<app-nueva-fila *ngIf="facturacion.popUpFilaNueva" [nuevaFila]="objetoFila" [accion]="accion"
+    [codigos]="codigosSolicitud"></app-nueva-fila>
+<dx-popup class="popup" [width]="450" [height]="220" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="facturacion.verListaPerfiles">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <label for="">Seleccionar un perfil: </label>
+      <dx-select-box [items]="this.facturacion.perfiles" displayExpr="nombre" valueExpr="oid"
+        [(value)]="this.seleccionado"></dx-select-box>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-6 ">
+        <button class="btn claseButon btn-md ml-5" (click)="cambiarPerfil('SI')">Marcar como predeterminado</button>
+      </div>
+      <div class="col-md-6 ">
+        <button class="btn claseButon btn-md ml-5" (click)="cambiarPerfil('NO')">Aplicar</button>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-6 "><button class="btn claseButon btn-md ml-5" (click)="quitarPerfilPredeterminado()">Quitar
+          perfil predeterminado</button></div>
+      <div class="col-md-6 "><button (click)="facturacion.verListaPerfiles = false;"
+          class="btn btn-light btn-md ml-5">Cancelar</button></div>
+    </div>
+  </div>
+</dx-popup> 
+<dx-popup class="popup" [width]="350" [height]="200" [showTitle]="false" title="" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpPerfil">
+    <div *dxTemplate="let data of 'content'">
+        <div class="container">
+            <dx-validation-group #val1>
+                <label for="">Nombre nuevo perfil: </label>
+                <dx-text-box [(value)]="nombrePerfil">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-text-box>
+            </dx-validation-group>
+        </div>
+        <div class="text-center mt-3">
+            <button (click)="crearPerfil()" class="btn claseButon btn-md">Crear</button>
+            <button (click)="facturacion.popUpPerfil = false;" class="btn btn-light btn-md ml-3">Cancelar</button>
+        </div>
+    </div>
+</dx-popup>
+<dx-popup class="popup" [width]="350" [height]="200" [showTitle]="false" title="" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpPerfilMod">
+    <div *dxTemplate="let data of 'content'">
+        <div class="container">
+            <dx-validation-group #val2>
+                <label for="">Nombre perfil: </label>
+                <dx-text-box [(value)]="nombrePerfil">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-text-box>
+            </dx-validation-group>
+        </div>
+
+        <div class="text-center mt-3">
+            <button (click)="modificarPerfil()" class="btn claseButon btn-md">Modificar</button>
+            <button (click)="facturacion.popUpPerfilMod = false;" class="btn btn-light btn-md ml-3">Cancelar</button>
+        </div>
+    </div>
+</dx-popup>
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="this.loading" [showIndicator]="true"
+    [showPane]="true" [shading]="true" [message]="this.mensajeCarga" [closeOnOutsideClick]="false">
+</dx-load-panel>
+<!-- <dx-popup class="popup" [maxWidth]="240" [height]="100" [showTitle]="false" title="" showCloseButton="false"
+    [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="facturacion.nuevoServicio">
+    <div *dxTemplate="let data of 'content'">
+        <div class="row">
+            <div class="col-md-12" style="padding: 10px;">
+                <button (click)="nuevoConcepto('servicio')" class="col-md-12 btn btn-warning">Nuevo Servicio</button>
+            </div>
+        </div>
+    </div>
+</dx-popup> -->

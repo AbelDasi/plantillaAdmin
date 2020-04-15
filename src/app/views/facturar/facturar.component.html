@@ -1,0 +1,30 @@
+<div>
+    <!--
+        BLOQUE SOLICITUDES
+    -->
+<app-solicitudes *ngIf="this.facturacion.solicitudesBol"></app-solicitudes>
+<!--
+    FIN BLOQUE SOLICITUDES
+-->
+
+<!--
+    BLOQUE SERVICIOS
+-->
+<div *ngIf="this.facturacion.serviciosBol" class="card">
+
+<app-servicios></app-servicios>
+
+</div>
+<!--
+    FIN BLOQUE SERVICIOS
+-->
+
+<!--
+    BLOQUE RESUMEN
+-->
+<app-resumen *ngIf="this.facturacion.resumenBol"></app-resumen>
+
+<!--
+    FIN BLOQUE RESUMEN
+-->
+</div>

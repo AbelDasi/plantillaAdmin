@@ -1,0 +1,66 @@
+<div id="celdaSolicitudes" #celdaSolicitudes class="row mt-3">
+    <div class="col-md-12">
+        <dx-data-grid #grid1 [ngStyle]="{'height':alturaReferencia}" id="gridContainer"
+            [dataSource]="facturacion.listaDetalles" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+            [rowAlternationEnabled]="false" [hoverStateEnabled]="false" [allowColumnResizing]="true"
+            [wordWrapEnabled]="true" [allowColumnReordering]="true" 
+            (onRowPrepared)="onRowPrepared($event)" (onCellPrepared)="onCellPrepared($event)">
+            <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+            <dxo-paging [enabled]="true" [pageSize]="100"></dxo-paging>
+            <dxo-pager [showInfo]="true"></dxo-pager>
+            <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+          
+          <!--   <dxo-state-storing [enabled]="true" type="sessionStorage"  type="custom"
+                ></dxo-state-storing> -->
+            <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="tabla" caption="Servicio Nuevo"
+                alignment="center" cellTemplate="servicioCellTemplate">
+            </dxi-column>
+            <dxi-column [allowEditing]="false" [allowSorting]="true" visible="false" dataField="codigo"
+                caption="Solicitud" alignment="center">
+            </dxi-column>
+            <dxi-column [allowEditing]="false"  [allowSorting]="true"
+                dataField="servicio_nombre" caption="Codigo servicio">
+            </dxi-column>
+            <dxi-column [allowSorting]="true" dataField="servicio_descripcion" caption="Descripción" alignment="center"
+                editCellTemplate="observacionesCellTemplate">
+            </dxi-column>
+            <dxi-column [allowSorting]="true" dataField="observaciones" caption="Observaciones" alignment="center">
+            </dxi-column>
+            <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cantidad" caption="Cantidad"
+                alignment="center"></dxi-column>
+            <dxi-column [allowSorting]="true" dataField="precio_unidad" caption="Precio unidad (€)" alignment="center">
+            </dxi-column>
+
+            <dxi-column [allowEditing]="false" [calculateCellValue]="calculateCellValue"
+                cellTemplate="totalCellTemplate" caption="Total (€)" alignment="center" dataField="total">
+            </dxi-column>
+            <dxi-column [allowEditing]="true" 
+                 caption="Pedido" alignment="center" dataField="pedido">
+            </dxi-column>
+            <div *dxTemplate="let data of 'servicioCellTemplate'">
+                <span *ngIf="data.data.tabla === 'nueva' && data.data.posicion === 0"><i
+                        style="color: green;font-size: 20px;" class="fas fa-circle"></i></span>
+            </div>
+            <div *dxTemplate="let data of 'observacionesCellTemplate'">
+                <dx-text-area [autoResizeEnabled]="true" [minHeight]="100" [maxLength]="500"
+                    [(value)]="data.data.servicio_descripcion" (onValueChanged)="setEditedValue($event, data)">
+                </dx-text-area>
+            </div>
+            <div *dxTemplate="let data of 'totalCellTemplate'">
+                {{data.data.total}} €
+            </div>
+            <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="codigo" summaryType="count">
+                </dxi-total-item>
+                <dxi-total-item column="total" summaryType="sum" valueFormat="#,##0.##">
+                </dxi-total-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+</div>

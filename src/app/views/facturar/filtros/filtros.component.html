@@ -1,0 +1,254 @@
+<!-- <div id="iniciado" class="card">
+    <div class="card-body">
+        <div style="font-size: 25px;border-bottom:1px solid black;" class="card-title mb-3">Filtros
+        </div>
+        <div class="row" style="margin-right: 0px;margin-left: 0px;">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div (click)="irSolicitudes('inmediata')" class="solicitudesFilter"
+                            [ngStyle]="{'background': this.filtrarBol ===true ? 'white' :'#0B86CA'}">
+                            <span [ngStyle]="{'color': this.filtrarBol ===true ? '#0B86CA' :'white'}"
+                                style="display: table-cell;vertical-align: middle;color: white;font-size:14px;">
+                                <i style="text-align: center; font-size: 30px;" class="fas fa-file-alt"></i>
+                                <br>
+                                Solicitudes
+                            </span>
+                        </div>
+                        <div (click)="irSolicitudes('prefactura')" class="solicitudesFilter"
+                            [ngStyle]="{'background': this.filtrarBol ===true ? 'white' :'#0B86CA'}">
+                            <span [ngStyle]="{'color': this.filtrarBol ===true ? '#0B86CA' :'white'}"
+                                style="display: table-cell;vertical-align: middle;color: white;font-size:14px;">
+                                <i style="text-align: center; font-size: 30px;" class="far fa-file-alt"></i>
+                                <br>
+                                Prefacturas
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3 mb-3">
+            <ngb-accordion #accordion>
+                <ngb-panel id="panel">
+                    <ng-template ngbPanelTitle>
+                        <span style="border-bottom: 1px solid #0B86CA;font-weight: bold;">Opciones de busqueda
+                            avanzada</span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="row mt-2">
+                            <div class="col-md-3"><label for="">Fecha Desde</label>
+                                <dx-date-box [(value)]="fechaInicio" [ngStyle]="{'width': '100%'}"
+                                    [displayFormat]="'dd/MM/yyyy'">
+                                </dx-date-box>
+                            </div>
+                            <div class="col-md-3"><label for="">Fecha Hasta</label>
+                                <dx-date-box [(value)]="fechaFin" [ngStyle]="{'width': '100%'}"
+                                    [displayFormat]="'dd/MM/yyyy'">
+                                </dx-date-box>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Pedido Cab</label> <input type="text"
+                                    [(ngModel)]="objetoFiltro.pedido_cabecera" class="form-control"
+                                    placeholder="Pedido Cab">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Pedido</label> <input type="text"
+                                    [(ngModel)]="objetoFiltro.referencia_cliente" class="form-control"
+                                    placeholder="Pedido">
+                            </div>
+
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-3"><label for="">Cliente</label>
+                                <dx-tag-box [(value)]="objetoFiltro.cliente" [searchEnabled]="true"
+                                    [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                                    [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid">
+                                </dx-tag-box>
+                            </div>
+                            <div class="col-md-3"><label for="">Cliente Facturar</label>
+                                <dx-tag-box [(value)]="objetoFiltro.cliente_facturar" [searchEnabled]="true"
+                                    [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                                    [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid">
+                                </dx-tag-box>
+                            </div>
+                            <div class="col-md-3"><label for="">Servicios</label>
+                                <dx-tag-box [(value)]="objetoFiltro.servicios" [searchEnabled]="true"
+                                    [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                                    [dataSource]="lookupData1" displayExpr="nombre" valueExpr="oid">
+                                </dx-tag-box>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Solicitud</label>
+                                <dx-text-box [(value)]="objetoFiltro.solicitud"></dx-text-box>
+                            </div>
+                        </div>
+
+                        <div class="text-right mt-3">
+                            <button class="btn claseButon btn-md" (click)="buscar()">
+                                Buscar
+                                <i style="margin-left: 5px;" class="fas fa-search"></i>
+                            </button>
+                        </div>
+
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+        </div>
+          <div id="celdaSolicitudes" #celdaSolicitudes class="row"
+      style="margin-right: 0px;margin-left: 0px; margin-bottom: 20px;">
+      <div class="col-md-12">
+        <dx-data-grid  [ngStyle]="{'height':alturaReferencia}"
+          id="gridContainer1" [dataSource]="solicitudes" [showColumnLines]="true" [showRowLines]="true"
+          [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="false" 
+          [wordWrapEnabled]="true" [allowColumnReordering]="true" [columnAutoWidth]="true"
+          [columnMinWidth]="100"
+          (onSelectionChanged)="onSelectionChanged($event)" (onRowPrepared)="onRowPrepared($event)"
+          (onCellPrepared)="onCellPrepared($event)">
+          <dxo-state-storing [enabled]="true" type="sessionStorage"  type="custom"
+            ></dxo-state-storing>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-header-filter [visible]="false"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+          <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+          <dxo-pager [showInfo]="true"></dxo-pager>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-selection mode="multiple">
+          </dxo-selection>
+          <dxo-editing mode="batch" [allowUpdating]="true">
+          </dxo-editing>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="bool_facturacion" caption="Facturada"
+            alignment="center" cellTemplate="facturadaCellTemplate">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="serviciosfac1"
+            caption="Servicios facturables" alignment="center" cellTemplate="SFCellTemplate">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="acuerdo" caption="Acuerdo"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrada" caption="Fecha Entrada"
+            alignment="center" cellTemplate="fechaEntradaCellTemplate">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrega" caption="Fecha Entrega"
+            alignment="center" cellTemplate="fechaEntregaCellTemplate">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrega_prevista"
+            caption="Fecha Entrega Prevista" alignment="center" cellTemplate="fechaEntregaPrevistaCellTemplate">
+          </dxi-column>
+          <dxi-column [width]="200" [allowEditing]="false" [allowSorting]="false" dataField="cliente_oid"
+            caption="Cliente solicitante" alignment="center">
+            <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [width]="200" [setCellValue]="setClientValue" [allowSorting]="false" dataField="factura_a"
+            caption="Cliente a facturar" alignment="center">
+            <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" dataField="codigo" caption="Código"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [setCellValue]="setProyecto" [allowSorting]="true" dataField="codigo_proyecto" caption="Proyecto"
+            alignment="center">
+            <dxo-lookup [dataSource]="lookupData1"  pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre" displayValue="nombre"
+              valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" [setCellValue]="setsubTarea" dataField="codigo_subtarea" caption="Subtarea"
+            alignment="center">
+            <dxo-lookup [dataSource]="getFilteredSubTarea" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" [setCellValue]="setTarea" dataField="codigo_tarea" caption="Tarea"
+            alignment="center">
+            <dxo-lookup [dataSource]="getFilteredTarea" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+            valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="estado" caption="Estado Solicitud"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="emails_envio"
+            caption="Emails envío informe" alignment="center">
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="tipologia" caption="Tipologia" alignment="center">
+            <dxo-lookup [dataSource]="getFilteredTipo" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [width]="100" [allowEditing]="true" [allowSorting]="true" dataField="referencia_cliente"
+            caption="Pedido (Ref. Cliente)" alignment="center"></dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="req_especiales"
+            caption="Requisitos especiales" alignment="center"></dxi-column>
+          <dxi-column [allowSorting]="true" dataField="tipo_facturacion" caption="Facturación" alignment="center">
+            <dxo-lookup [dataSource]="tiposFacturacion" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="tipo_facturacion_cliente"
+            caption="Facturación Cliente" alignment="center">
+            <dxo-lookup [dataSource]="tiposFacturacion" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="envio_automatico" caption="Envío Automatico" alignment="center">
+            <dxo-lookup [dataSource]="envios_automaticos" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="retenida" caption="Retenida" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false"  [allowSorting]="true" dataField="observaciones"
+            caption="Observaciones Lab" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false"  [allowSorting]="true" dataField="observaciones_so"
+            caption="Observaciones So" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="true"  [allowSorting]="true" dataField="observaciones_fac"
+            caption="Observaciones fac" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false"  [allowSorting]="true" dataField="req_no_mezclar"
+            caption="No mezclar" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false"  [allowSorting]="true" dataField="total"
+          cellTemplate="pedidoCompletoCellTemplate"
+          caption="Pedido Completo" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false"  [allowSorting]="true" dataField="total_importe"
+          cellTemplate="importeCellTemplate"
+          caption="Importe" alignment="center">
+          </dxi-column>
+          <div *dxTemplate="let data of 'fechaEntradaCellTemplate'">
+            {{metodos.formatFech(data.data.fecha_entrada)}}
+          </div>
+          <div *dxTemplate="let data of 'fechaEntregaCellTemplate'">
+            {{metodos.formatFech(data.data.fecha_entrega)}}
+          </div>
+          <div *dxTemplate="let data of 'fechaEntregaPrevistaCellTemplate'">
+            {{metodos.formatFech(data.data.fecha_entrega_prevista)}}
+          </div>
+          <div *dxTemplate="let data of 'facturadaCellTemplate'">
+            <span *ngIf="data.data.bool_facturacion"> <i style="color: green;font-size: 20px;"
+                class="fas fa-check"></i></span>
+          </div>
+          
+          <div *dxTemplate="let data of 'SFCellTemplate'">
+            <span *ngIf="data.data.serviciosfac1 === 0"
+              style="color:red;font-weight: bold">{{data.data.serviciosfac1}}</span>
+            <span *ngIf="data.data.serviciosfac1 > 0" style="font-weight: bold;">{{data.data.serviciosfac1}}</span>
+          </div>
+          <div *dxTemplate="let data of 'pedidoCompletoCellTemplate'">
+            <span *ngIf="data.data.req_pedido_completo && data.data.total >0" style="font-weight: bold;"
+            [ngStyle]="{'color': data.data.entregadas < data.data.total ? 'red' :'black'}">{{data.data.entregadas}}/{{data.data.total}}</span>
+          </div>
+          <div style="text-align: right;font-weight: bold;" *dxTemplate="let data of 'importeCellTemplate'">
+            {{data.data.total_importe + data.data.total_importe1 | number: '1.0-2' }} €
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="codigo" summaryType="count">
+            </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+
+      </div>
+    </div> 
+    </div>
+</div> -->

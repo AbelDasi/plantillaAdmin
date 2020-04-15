@@ -1,0 +1,149 @@
+<div class="row">
+    <div *ngIf="verMenu" class="col-md-1" style="max-width: 12%;">
+        <div class="row mt-3 mb-3 ml-3 menu">
+            <div class="col-md-12 mt-3 ml-2">
+                <button style="margin-left: 30%;" (click)="ocultarMenu()" class="btn claseButon"><i
+                        class="fas fa-eye-slash"></i></button>
+            </div>
+            <div class="col-md-12 mt-3 ml-2"><button (click)="salir()" [ngStyle]="{'width': '90%'}"
+                    class="btn btn btn-outline-secondary">Volver a facturas</button></div>
+            <div class="col-md-12 mt-3 ml-2"><button (click)="irSolicitudes()" [ngStyle]="{'width': '90%'}"
+                    style="font-size: 12px;" class="btn btn btn-outline-secondary">Volver a solicitudes</button></div>
+            <div class="col-md-12 mt-3 ml-2"><button [disabled]="habilitarAcciones" [ngStyle]="{'width': '90%'}"
+                    class="btn btn btn-outline-secondary" (click)="refacturar()">Refacturar</button></div>
+            <!--     <div class="col-md-12 mt-3 ml-2"><button [disabled]="habilitarAcciones" [ngStyle]="{'width': '90%'}"
+                    class="btn btn btn-outline-secondary" (click)="guardar()">Guardar</button></div> -->
+
+            <div class="col-md-12 mt-3 ml-2"><button [disabled]="habilitarAcciones" [ngStyle]="{'width': '90%'}"
+                style="font-size: 10px;"
+                    class="btn btn btn-outline-secondary" (click)="eliminarPreRefactura()">Eliminar
+                    Pre-Refactura</button></div>
+
+        </div>
+    </div>
+    <div [ngClass]="{'col-md-11':!verMenu}" class="col-md-9 ml-3 mb-3">
+        <div *ngIf="seeDetails" style="display: flex;border-bottom: 1px solid black;font-size: 16px;"
+            class="text-center mt-3">
+            <button *ngIf="!verMenu" (click)="ocultarMenu()" class="btn claseButon" style="margin-right: 2%;"><i
+                    class="fas fa-eye"></i></button>
+
+            <span><span *ngIf="cabecera.codigo" style="font-weight: bold;">{{cabecera.codigo || null}}</span></span>
+            <span class="ml-3 mr-3">
+                <span style="font-weight: bold;">{{cabecera.fecha_factura | date: 'dd/MM/yyyy'}}</span> </span>
+            <!--   <span class="ml-3 mr-3"><strong>Solicitudes: </strong> <span>{{longitudSolicitudes}}</span> </span> -->
+
+            <span class="ml-3 mr-3" *ngIf="!cabecera.asociado_abono" style="color: red;font-weight: bold;">No asociado
+                a abono</span>
+            <span class="ml-3 mr-3" *ngIf="cabecera.asociado_abono" style="color: green;font-weight: bold;">Asociado al
+                abono {{cabecera.codigo_abono}}</span>
+
+        </div>
+        <form [formGroup]="formCabecera">
+            <div class="row mt-2 mb-3">
+                <div class="col-md-2"><label for="">Solicitante:</label>
+                    <dx-select-box formControlName="Solicitante" [searchEnabled]="true" [ngStyle]="{'width': '100%'}"
+                        [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid"></dx-select-box>
+                </div>
+                <div class="col-md-2"><label for="">Pedido:</label><input formControlName="Pedido" type="text"
+                        class="form-control" placeholder="Pedido"></div>
+                <div class="col-md-2"><label for="">Cliente Facturar</label>
+                    <dx-select-box formControlName="ClienteFacturar" [searchEnabled]="true"
+                        [ngStyle]="{'width': '100%'}" [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid">
+                    </dx-select-box>
+                </div>
+
+                <div class="col-md-2"><label for="">Email Envio:</label>
+                    <input formControlName="EmailEnvio" type="text" class="form-control" placeholder="Email">
+                </div>
+                <div class="col-md-2 mt-3">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="form-check">
+                                <input formControlName="NoCopia" class="form-check-input" type="checkbox"
+                                    id="gridCheck1">
+                                <label class="form-check-label" for="gridCheck1">
+                                    No enviar copia impresa
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-top: 2%;"><button [ngStyle]="{'width': '60%'}" class="btn btn btn-outline-secondary"
+                        [disabled]="habilitarAcciones"
+                        (click)="guardar()">Guardar <i class="ml-3" class="far fa-save"></i></button></div>
+            </div>
+            <ngb-accordion>
+                <ngb-panel title="Más info">
+                    <ng-template ngbPanelContent>
+                        <div class="row mt-2">
+                            <div class="col-md-3"><label for="">Nombre</label><input readonly formControlName="Nombre"
+                                    type="text" class="form-control" placeholder="Email"></div>
+                            <div class="col-md-3"><label for="">Dirección</label> <input readonly
+                                    formControlName="Direccion" type="text" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-3"><label for="">Cod. Postal</label> <input readonly
+                                    formControlName="CodPostal" type="text" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-3"><label for="">Población</label> <input readonly
+                                    formControlName="Poblacion" type="text" class="form-control" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-3"><label for="">Provincia</label> <input readonly
+                                    formControlName="Provincia" type="text" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-3"><label for="">Contacto</label> <input readonly
+                                    formControlName="Contacto" type="text" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-3"><label for="">Fecha vencimiento</label>
+                                <dx-date-box formControlName="FechaVencimiento" [ngStyle]="{'width': '100%'}"
+                                    [displayFormat]="'dd/MM/yyyy'">
+                                </dx-date-box>
+                            </div>
+                            <div class="col-md-3"><label for="">Cod. Pago</label>
+                                <input readonly formControlName="CodPago" type="text" class="form-control"
+                                    placeholder="Cod. Pago"></div>
+                        </div>
+
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+            <!---->
+        </form>
+        <div id="card-service">
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <app-refactura-detalle [oidRefactura]="oidRefactura"></app-refactura-detalle>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dx-popup class="popup card mb-4" [width]="450" [height]="280" [showTitle]="false" title="" [dragEnabled]="false"
+    [closeOnOutsideClick]="true" [(visible)]="popUpConfirmRefactura">
+    <div *dxTemplate="let data of 'content'">
+        <div class="container">
+            <div class="text-center">
+                <h4 style="display: inline;;">Va a mandar a refacturar, ¿Esta seguro/a?</h4>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12 "><label for="">Fecha Registro</label>
+                    <dx-date-box [(value)]="fecha" [ngStyle]="{'width': '100%'}" [displayFormat]="'dd/MM/yyyy'">
+                    </dx-date-box>
+                </div>
+            </div>
+            <!---===== Print Area =======-->
+            <div style="height: 30px;"></div>
+            <div class="text-center mt-3 mb-3">
+                <button (click)="metodoRefacturar()" class="btn claseButon btn-lg ml-3">Sí</button>
+                <button (click)="popUpConfirmRefactura = false;" class="btn btn-ligth btn-lg ml-3">No</button>
+            </div>
+
+        </div>
+
+
+        <!--==== / Print Area =====-->
+    </div>
+
+</dx-popup>

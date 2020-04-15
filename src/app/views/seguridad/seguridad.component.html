@@ -1,0 +1,79 @@
+<div class="container">
+        <div class="row">
+                <div class="col-md-12 pb-3">
+                    <button (click)="open1(modalBasic)" style="float: right;" type="button" class="btn btn-primary btn-rounded m-1">Nuevo Usuario<i style="margin-left: 2px;" class="fas fa-plus"></i></button>
+                </div>
+              </div>
+    <dx-data-grid
+                  id="gridContainer" [columns]="columnas" [dataSource]="this._seguridad.usuarios"
+                  [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="true"
+                  [allowColumnResizing]="true"
+                  [wordWrapEnabled]="true">
+                  <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-header-filter [visible]="false"></dxo-header-filter>
+                  <dxo-search-panel [visible]="true" [width]="150" ></dxo-search-panel>
+                  <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                  <dxo-pager [showInfo]="true"></dxo-pager>
+                  <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+                  <dxo-group-panel [visible]="true"></dxo-group-panel>
+                  <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+                  <dxo-state-storing [enabled]="false" type="sessionStorage" storageKey="id" [savingTimeout]="250"></dxo-state-storing>
+                  <div *dxTemplate="let data of 'cellTemplateColor'">
+                  <dx-color-box disabled="true" *ngIf="data.data.color !== null" [(value)]="data.data.color">
+                  </dx-color-box>  
+                  </div>
+                  <div *dxTemplate="let data of 'cellTemplateDelete'">
+                   <i (click)="open(modalBasic, data.data)" style="color: green;padding:5px;cursor: pointer;" title="Editar" class="fas fa-edit"></i>
+                   <i (click)="eliminarUsuario(data.data.oid)" style="color: red;cursor: pointer;" title="Eliminar" class="fas fa-trash"></i>
+                  </div>
+                  </dx-data-grid>
+</div>
+<ng-template #modalBasic let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Editar Usuario</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formUsuario">
+            <div class="card mb-3">
+              <div class="card-body">
+                  <div class="card-title mb-3">Datos Cliente</div>
+                      <div class="row">
+                          <div class="col-md-12 form-group mb-3">
+                              <label for="firstName">Nombre</label>
+                              <input formControlName="nombre" type="text" class="form-control"  placeholder="Ponga su nombre">
+                          </div>
+                          <div class="col-md-12 form-group mb-3">
+                            <label for="credit">Login</label>
+                            <input formControlName="login" type="text" class="form-control"  placeholder="Login">
+                        </div>
+                        <div class="col-md-12 form-group mb-3">
+                                <label for="credit">Contraseña</label>
+                                <input formControlName="password" type="password" class="form-control"  placeholder="Login">
+                            </div>
+                        <div class="col-md-12 form-group mb-3">
+                          <label for="credit">Color</label>
+                          <input formControlName="color" type="color" class="form-control"  placeholder="Color">
+                        </div>
+                          <div class="col-md-12 form-group mb-3">
+                              <label for="credit">Correo</label>
+                              <input formControlName="correo" type="email"  class="form-control"  placeholder="Correo">
+                          </div>
+                          <div class="col-md-12 form-group mb-3">
+                                <label for="credit">Firma</label>
+                                <input type="file" (input)="seleccionImage($event.target.files[0])"  class="form-control"  placeholder="Firma">
+                          </div>
+                      </div>
+              </div>
+          </div>
+          </form>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12 text-center">
+          <button (click)="ModificarUsuario(formUsuario, parametro)" style="width: 120px !important;" type="submit" class="btn btn-primary btn-rounded m-1">Guardar</button>
+          </div>
+      </div>
+</ng-template>

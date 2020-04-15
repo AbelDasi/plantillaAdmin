@@ -1,0 +1,580 @@
+<div id="inicio" class="card">
+  <div class="card-body">
+    <div style="font-size: 25px;border-bottom:1px solid black;" class="card-title mb-3">{{facturacion.tituloPagina}}
+    </div>
+    <div class="row" style="margin-right: 0px;margin-left: 0px;">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <div (click)="irPaginaFiltros()" class="solicitudesFilter"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='busqueda' ? 'white' :'#0B86CA'}">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='busqueda' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:14px;">
+                <i style="text-align: center; font-size: 30px;" class="fas fa-filter"></i>
+                <br>
+                Busqueda Avanzada
+              </span>
+            </div>
+            <div [ngStyle]="{'background': this.parametroFiltroTipo ==='sin facturar' ? 'white' :'#0B86CA'}"
+              (click)="seleccionBotones('sin facturar')" class="solicitudesFilter1">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='sin facturar' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.SinFacturar}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Sin Factura</span>
+              </span>
+            </div>
+            <div (click)="seleccionBotones('inmediata')" class="solicitudesFilter1"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='inmediata' ? 'white' :'#0B86CA'}">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='inmediata' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.Inmediata}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Inmediata</span>
+              </span>
+            </div>
+            <div (click)="seleccionBotones('mensual')" class="solicitudesFilter"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='mensual' ? 'white' :'#0B86CA'}">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='mensual' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.Mensual}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Mensual</span>
+              </span>
+            </div>
+            <div (click)="seleccionBotones('retenida')"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='retenida' ? 'white' :'#0B86CA'}"
+              style="height:90px;width:90px;float: left;background-color: #0B86CA;
+                   text-align: center;display: table;cursor: pointer;margin-bottom: 10px;box-shadow: 0px 3px 6px #00000029;">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='retenida' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;border: 1px solid #0B86CA;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.Retenida}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Retenidas</span>
+              </span>
+            </div>
+            <div (click)="seleccionBotones('prefactura')"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='prefactura' ? 'white' :'#0B86CA'}"
+              style="height:90px;width:90px;float: left;background-color: #0B86CA;
+                   text-align: center;display: table;cursor: pointer;margin-bottom: 10px;box-shadow: 0px 3px 6px #00000029;margin-left: 5px;">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='prefactura' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;border: 1px solid #0B86CA;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.Prefacturas}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Prefacturas</span>
+              </span>
+            </div>
+            <div (click)="irFacturas()"
+              [ngStyle]="{'background': this.parametroFiltroTipo ==='factura' ? 'white' :'#0B86CA'}"
+              style="height:90px;width:90px;float: left;background-color: #0B86CA;
+                 text-align: center;display: table;cursor: pointer;margin-bottom: 10px;box-shadow: 0px 3px 6px #00000029;margin-left: 3px;">
+              <span [ngStyle]="{'color': this.parametroFiltroTipo ==='factura' ? '#0B86CA' :'white'}"
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;border: 1px solid #0B86CA;">
+                <span style="text-align: center; font-size: 25px;">{{countFacturacion.Facturas}}</span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Facturas</span>
+              </span>
+            </div>
+            <div *ngIf="!paginacionGrid" (click)="paginacionGrid = true;"
+              style="height:90px;width:90px;float: left;background-color: #0B86CA;
+                 text-align: center;display: table;cursor: pointer;margin-bottom: 10px;box-shadow: 0px 3px 6px #00000029;margin-left: 3px;">
+              <span
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;border: 1px solid #0B86CA;">
+                <span style="text-align: center; font-size: 25px;"></span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">Paginar</span>
+              </span>
+            </div>
+            <div *ngIf="paginacionGrid" (click)="paginacionGrid = false;"
+              style="height:90px;width:90px;float: left;background-color: #0B86CA;
+                 text-align: center;display: table;cursor: pointer;margin-bottom: 10px;box-shadow: 0px 3px 6px #00000029;margin-left: 3px;">
+              <span
+                style="display: table-cell;vertical-align: middle;color: white;font-size:10px;border: 1px solid #0B86CA;">
+                <span style="text-align: center; font-size: 25px;"></span>
+                <br>
+                <span style="text-align: center; font-size: 15px;font-weight: bold;">No Paginar</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="this.parametroFiltroTipo !== 'prefactura'" class="col-md-4">
+        <div *ngIf="this.solicitudesSeleccionadas.length > 0" class="container" style="font-size: 15px;">
+          <div class="text-center">Se han seleccionado {{this.solicitudesSeleccionadas.length}} solicitudes de
+            {{this.facturacion.solicitudes.length}}</div>
+          <div class="text-center">
+            <label class="checkbox checkbox-primary">
+              <input (change)="cambioSeleccion($event)" [(ngModel)]="seleccionGridBool" type="checkbox">
+              <span>Seleccionar todas </span>
+              <span class="checkmark seleccion"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.parametroFiltroTipo === 'prefactura'" class="col-md-4">
+        <div class="container" style="font-size: 15px;">
+          <div class="text-center">Se han seleccionado {{preFacturasSel}} prefacturas de
+            {{longitudPre}}</div>
+          <div class="text-center">
+            <label class="checkbox checkbox-primary">
+              <input [(ngModel)]="seleccion" (change)="cambioSeleccion1($event)" type="checkbox">
+              <span>Seleccionar todas </span>
+              <span class="checkmark seleccion"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button
+          *ngIf="this.parametroFiltroTipo !== 'prefactura' && this.parametroFiltroTipo !== 'sin facturar' && this.parametroFiltroTipo !=='factura'"
+          [disabled]="devolverHabilitarBoton()" type="button" (click)="prefacturar()"
+          style="background-color: #0B86CA !important;color: white;margin-bottom: 10px;" class="btn btn-lg btn-block">
+          Prefacturar
+        </button>
+        <button *ngIf="this.parametroFiltroTipo === 'factura'"
+          style="background-color: #0B86CA !important;color: white;margin-bottom: 10px;" class="btn btn-lg btn-block">
+          Detalles Facturas
+        </button>
+        <button (click)="asociarProyectos()" *ngIf="this.parametroFiltroTipo === 'sin facturar'"
+          style="background-color: #0B86CA !important;color: white;margin-bottom: 10px;" class="btn btn-lg btn-block">
+          Asociar a Proyecto
+        </button>
+        <button *ngIf="this.parametroFiltroTipo === 'prefactura'" type="button" (click)="facturar()"
+          style="background-color: #0B86CA !important;color: white;margin-bottom: 10px;" class="btn btn-lg btn-block">
+          Detalle Prefactura
+        </button>
+      </div>
+      <div *ngIf="mostrarFiltro" class="col-md-12">
+        <div class="mt-3 mb-3">
+          <ngb-accordion #accordion>
+            <ngb-panel id="panel">
+              <ng-template ngbPanelTitle>
+                <span style="border-bottom: 1px solid #0B86CA;font-weight: bold;">Opciones de busqueda
+                  avanzada</span>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <div class="row mt-2">
+
+                  <div class="col-md-3"><label for="">Fecha Desde</label>
+                    <dx-date-box [(value)]="facturacion.fechaInicioFiltro" [ngStyle]="{'width': '100%'}"
+                      [displayFormat]="'dd/MM/yyyy'">
+                    </dx-date-box>
+                  </div>
+                  <div class="col-md-3"><label for="">Fecha Hasta</label>
+                    <dx-date-box [(value)]="facturacion.fechaFinFiltro" [ngStyle]="{'width': '100%'}"
+                      [displayFormat]="'dd/MM/yyyy'">
+                    </dx-date-box>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="checkbox checkbox-primary">
+                      <input [(ngModel)]="facturacion.objetoFiltro.fechasbool" type="checkbox">
+                      <span>Filtrar por fechas </span>
+                      <span class="checkmark seleccion"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-3"><label for="">Cliente</label>
+                    <dx-tag-box [(value)]="facturacion.objetoFiltro.cliente" [searchEnabled]="true"
+                      [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                      [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid">
+                    </dx-tag-box>
+                  </div>
+                  <div class="col-md-3"><label for="">Cliente Facturar</label>
+                    <dx-tag-box [(value)]="facturacion.objetoFiltro.cliente_facturar" [searchEnabled]="true"
+                      [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                      [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid">
+                    </dx-tag-box>
+                  </div>
+                  <div class="col-md-3"><label for="">Servicios</label>
+                    <dx-tag-box [(value)]="facturacion.objetoFiltro.servicios" [searchEnabled]="true"
+                      [ngStyle]="{'width': '100%'}" [maxDisplayedTags]="3" [showSelectionControls]="true"
+                      [dataSource]="lookupDataServicios" displayExpr="nombre" valueExpr="oid">
+                    </dx-tag-box>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="">Solicitud</label>
+                    <dx-text-box [(value)]="facturacion.objetoFiltro.solicitud"></dx-text-box>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-3">
+                    <label for="">Pedido Solicitud</label> <input type="text"
+                      [(ngModel)]="facturacion.objetoFiltro.referencia_cliente" class="form-control"
+                      placeholder="Pedido">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="">Pedido Cabecera</label> <input type="text"
+                      [(ngModel)]="facturacion.objetoFiltro.pedido_cabecera" class="form-control"
+                      placeholder="Pedido Cab">
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="">Factura</label>
+                    <dx-text-box [(value)]="facturacion.objetoFiltro.factura"></dx-text-box>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="">Abono</label>
+                    <dx-text-box [(value)]="facturacion.objetoFiltro.abono"></dx-text-box>
+                  </div>
+                </div>
+
+                <div class="text-right mt-3">
+                  <button class="btn claseButon btn-md" (click)="buscar()">
+                    Buscar
+                    <i style="margin-left: 5px;" class="fas fa-search"></i>
+                  </button>
+                </div>
+
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 10px;"></div>
+  </div>
+  <div>
+    <div id="celdaSolicitudes" #celdaSolicitudes class="row"
+      style="margin-right: 0px;margin-left: 0px; margin-bottom: 20px;">
+      <div *ngIf="cambiaEstado" class="col-md-12">
+        <dx-data-grid *ngIf="this.facturacion.gridSolicitudesBol" [ngStyle]="{'height':alturaReferencia}"
+          id="gridContainer1" [dataSource]="facturacion.solicitudes" [showColumnLines]="true" [showRowLines]="true"
+          [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="false" [wordWrapEnabled]="true"
+          [allowColumnReordering]="true" [columnAutoWidth]="false" [columnMinWidth]="100"
+          (onSelectionChanged)="onSelectionChanged($event)" (onRowPrepared)="onRowPrepared($event)"
+          (onCellPrepared)="onCellPrepared($event)" (onOptionChanged)="onOptionChanged1($event)"
+          (onToolbarPreparing)="onToolbarPreparing1($event)" (onInitialized)="onInitialized($event)"
+          (onEditorPreparing)="onEditorPreparing($event)" (onRowUpdated)="onRowUpdated($event)"
+          (onCellClick)="onCellClick($event)" (onEditingStart)="onEditingStart($event)">
+          <dxo-state-storing [enabled]="true" type="sessionStorage" [storageKey]="configuracion" type="custom"
+            [customLoad]="customLoad" [customSave]="customSave"></dxo-state-storing>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-header-filter [visible]="false"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+          <dxo-paging [enabled]="paginacionGrid" [pageSize]="50"></dxo-paging>
+          <dxo-pager [showInfo]="true"></dxo-pager>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-selection mode="multiple" [selectAllMode]="seleccionGrid">
+          </dxo-selection>
+          <dxo-editing mode="batch" [allowUpdating]="true">
+          </dxo-editing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column [fixed]="true" fixedPosition="left" [allowEditing]="false" [allowSorting]="true"
+            dataField="codigo" caption="Código" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="acuerdo" caption="Acuerdo"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrada_format" caption="Fecha Entrada"
+            alignment="center" >
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrega_format" caption="Fecha Entrega"
+            alignment="center" >
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_entrega_prevista_format"
+            caption="Fecha Entrega Prevista" alignment="center" >
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="estado" caption="Estado Solicitud"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="serviciosfac1"
+            caption="Servicios facturables" alignment="center" cellTemplate="SFCellTemplate">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="total"
+            cellTemplate="pedidoCompletoCellTemplate" caption="Pedido Completo" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="pedidoenfactura"
+            caption="Pedido en factura" alignment="center"></dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="req_no_mezclar" caption="No mezclar"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="agrupar_facturas_analiticas"
+            caption="No Agrupar Facturas" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="desglosar_direccion_envio"
+            caption="Desglosar Direccion" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="direccion_envio" caption="Direccion Envio"
+            alignment="center">
+            <dxo-lookup [dataSource]="lookupDataDireccionesEnvio" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="codigo" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column  [allowEditing]="true" [allowSorting]="true" dataField="referencia_cliente"
+            caption="Pedido (Ref. Cliente)" alignment="center"></dxi-column>
+          <dxi-column  [allowEditing]="false" [allowSorting]="false" dataField="cliente_oid"
+            caption="Cliente solicitante" alignment="center">
+            <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column  [setCellValue]="setClientValue" [allowSorting]="false" dataField="factura_a"
+            caption="Cliente a facturar" alignment="center">
+            <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [setCellValue]="setProyecto" [allowSorting]="true"
+            dataField="codigo_proyecto" caption="Proyecto" alignment="center">
+            <dxo-lookup [dataSource]="lookupData1" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+              displayValue="nombre" valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" [setCellValue]="setTarea" dataField="codigo_tarea"
+            caption="Tarea" alignment="center">
+            <dxo-lookup [dataSource]="getFilteredTarea" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" [setCellValue]="setsubTarea"
+            dataField="codigo_subtarea" caption="Subtarea" alignment="center">
+            <dxo-lookup [dataSource]="getFilteredSubTarea" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="nombre"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="emails_envio"
+            caption="Emails envío informe" alignment="center">
+          </dxi-column>
+         
+            <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="codigo_cliente"
+            caption="Código Cliente" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="cliente"
+            caption="Nombre Cliente" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="codigo_cliente_facturar"
+            caption="Código Cliente Facturar" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [width]="150" [allowSorting]="true" dataField="nombre_cliente_facturar"
+            caption="Nombre Cliente Facturar" alignment="center">
+          </dxi-column>
+
+          <dxi-column [allowSorting]="true" dataField="tipologia" caption="Tipologia" alignment="center">
+            <dxo-lookup  [dataSource]="getFilteredTipo" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="tipo_facturacion" caption="Facturación" alignment="center">
+            <dxo-lookup [dataSource]="tiposFacturacion" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="tipo_facturacion_cliente"
+            caption="Facturación Cliente" alignment="center">
+            <dxo-lookup [dataSource]="tiposFacturacion" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="envio_automatico" caption="Envío Automatico" alignment="center">
+            <dxo-lookup [dataSource]="envios_automaticos" pageLoadMode="nextButton" nextButtonText="More"
+              displayExpr="nombre" valueExpr="oid"></dxo-lookup>
+          </dxi-column>
+          <dxi-column [allowSorting]="true" dataField="retenida" caption="Retenida" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="observaciones" caption="Observaciones Lab"
+            alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="observaciones_so"
+            caption="Observaciones So" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" dataField="observaciones_fac"
+            caption="Observaciones fac" alignment="center">
+          </dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" dataField="codigo_prefactura"
+            caption="Código Prefactura" alignment="center" [(visible)]="codigosVisibles"></dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" dataField="codigo_factura" caption="Código Factura"
+            alignment="center" [(visible)]="codigosVisibles"></dxi-column>
+          <dxi-column [allowEditing]="true" [allowSorting]="true" dataField="codigo_abono" caption="Código Abono"
+            alignment="center" [(visible)]="codigosVisibles">
+          </dxi-column>
+          <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="importe" caption="Importe"
+            alignment="center" cellTemplate="importeCellTemplate">
+          </dxi-column>
+          <div *dxTemplate="let data of 'facturadaCellTemplate'">
+            <span *ngIf="data.data.bool_facturacion"> <i style="color: green;font-size: 20px;"
+                class="fas fa-check"></i></span>
+          </div>
+
+          <div *dxTemplate="let data of 'SFCellTemplate'">
+            <span *ngIf="data.data.serviciosfac1 === 0"
+              style="color:red;font-weight: bold">{{data.data.serviciosfac1}}</span>
+            <span *ngIf="data.data.serviciosfac1 > 0" style="font-weight: bold;">{{data.data.serviciosfac1}}</span>
+          </div>
+          <div *dxTemplate="let data of 'pedidoCompletoCellTemplate'">
+            <span style="font-weight: bold;"
+              [ngStyle]="{'color': data.data.req_pedido_completo ? 'red' :'black'}">{{data.data.entregadas}}/{{data.data.total}}</span>
+          </div>
+          <div style="text-align: right;font-weight: bold;" *dxTemplate="let data of 'importeCellTemplate'">
+            {{data.data.importe | number: '1.2-2':'es-ES' }} €
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="codigo" summaryType="count">
+            </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+        <app-prefactura #child1 (recogerSeleccionadas)="recogerSeleccionadas($event)"
+          (longitudPre)="recogerLongitud($event)" [seleccion]="seleccion" *ngIf="this.facturacion.gridPrefacturas">
+        </app-prefactura>
+        <app-facturas #child2 *ngIf="this.facturacion.gridFacturas"></app-facturas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="this.facturacion.loading" [showIndicator]="true"
+  [showPane]="true" [shading]="true" [(message)]="mensajeCarga" [closeOnOutsideClick]="false">
+</dx-load-panel>
+<dx-popup class="popup" [width]="450" [height]="220" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="facturacion.verListaPerfiles">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <label for="">Seleccionar un perfil: </label>
+      <dx-select-box [items]="this.facturacion.perfiles" displayExpr="nombre" valueExpr="oid"
+        [(value)]="this.seleccionado"></dx-select-box>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-6 ">
+        <button class="btn claseButon btn-md ml-5" (click)="cambiarPerfil('SI')">Marcar como predeterminado</button>
+      </div>
+      <div class="col-md-6 ">
+        <button class="btn claseButon btn-md ml-5" (click)="cambiarPerfil('NO')">Aplicar</button>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-6 "><button class="btn claseButon btn-md ml-5" (click)="quitarPerfilPredeterminado()">Quitar
+          perfil predeterminado</button></div>
+      <div class="col-md-6 "><button (click)="facturacion.verListaPerfiles = false;"
+          class="btn btn-light btn-md ml-5">Cancelar</button></div>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="350" [height]="200" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpPerfil">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <dx-validation-group #val1>
+        <label for="">Nombre nuevo perfil: </label>
+        <dx-text-box [(value)]="nombrePerfil">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </dx-validation-group>
+    </div>
+
+    <div class="text-center mt-3">
+      <button (click)="crearPerfil()" class="btn claseButon btn-md">Crear</button>
+      <button (click)="facturacion.popUpPerfil = false;" class="btn btn-light btn-md ml-3">Cancelar</button>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="350" [height]="200" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpPerfilMod">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <dx-validation-group #val2>
+        <label for="">Nombre perfil: </label>
+        <dx-text-box [(value)]="nombrePerfil">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </dx-validation-group>
+    </div>
+    <div class="text-center mt-3">
+      <button (click)="modificarPerfil()" class="btn claseButon btn-md">Modificar</button>
+      <button (click)="facturacion.popUpPerfilMod = false;" class="btn btn-light btn-md ml-3">Cancelar</button>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="350" [height]="200" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpPerfilDelete">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+
+      <label for="">Seleccionar perfil a eliminar </label>
+      <dx-select-box [items]="this.facturacion.perfiles" displayExpr="nombre" valueExpr="oid"
+        [(value)]="this.idPerfilEliminar"></dx-select-box>
+    </div>
+
+    <div class="text-center mt-3">
+      <button (click)="deletePerfil()" class="btn claseButon btn-md">Eliminar</button>
+      <button (click)="facturacion.popUpPerfilDelete = false;" class="btn btn-light btn-md ml-3">Cancelar</button>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="600" [height]="400" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="true" [(visible)]="mostrarPopUp">
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view [height]="300" direction="both">
+      <div class="container">
+        <div class="text-center mt-3" *ngFor="let prefactura of solicitudesNoPrefactura">
+          <div *ngIf="!prefactura.retenida">
+            No se puede prefacturar la solicitud {{prefactura.codigo}} porque los servicios que le quedan por
+            prefacturar estan en estado no facturar, revise su selección.
+          </div>
+          <div *ngIf="prefactura.retenida">
+            No se puede prefacturar la solicitud {{prefactura.codigo}} porque esta en estado retenida,
+            revise su selección.
+          </div>
+
+        </div>
+      </div>
+    </dx-scroll-view>
+
+    <div class="text-center mt-3" style="position: absolute;bottom: 15px;left: 30%;">
+      <button style="width: 250px;" class="btn claseButon btn-md" (click)="mostrarPopUp = false;">Salir</button>
+    </div>
+
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="750" [height]="450" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="true" [(visible)]="mostrarPopUp1">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <div class="text-center mb-3">
+        <h5>Resumen de las solicitudes prefacturadas</h5>
+      </div>
+      <dx-scroll-view [height]="300" direction="both">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Nº de Prefactura</th>
+              <th scope="col">Solicitudes</th>
+              <th>Cod. Solicitud</th>
+              <th scope="col">Servicios PF</th>
+              <!--     <th scope="col">S. Nuevos PF</th> -->
+              <th scope="col">S. No PF</th>
+              <!--         <th scope="col">S. Nuevos no PF</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let solicitud of solicitudesPrefactura">
+              <td style="color:green;font-weight: bold">{{solicitud.codigo}}</td>
+              <td>{{solicitud.solicitud.length}}</td>
+              <td>
+                <span style="font-weight: bold;" *ngFor="let codigo of solicitud.solicitud">{{codigo}} <br></span>
+              </td>
+              <td>{{solicitud.servicios_facturar}}</td>
+              <td>{{solicitud.servicios_no_facturar}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </dx-scroll-view>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn claseButon btn-md" (click)="mostrarPopUp1 = false;">Continuar</button>
+    </div>
+
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="400" [height]="280" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popUpObservaciones">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <div class="text-center mt-3 mb-3">
+        {{observacion}}
+      </div>
+    </div>
+    <div class="text-center">
+      <button class="btn btn-lg btn-block" (click)="popUpObservaciones= false;">Salir</button>
+    </div>
+  </div>
+</dx-popup>

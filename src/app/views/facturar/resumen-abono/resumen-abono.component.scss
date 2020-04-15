@@ -1,0 +1,79 @@
+.derecha {
+    position: fixed;
+    bottom: 35%;
+    right: 3%;
+    font-size: 25px;
+    cursor: pointer;
+}
+.izquierda {
+    position: fixed;
+    bottom: 35%;
+    font-size: 25px;
+    left: 10%;
+    cursor: pointer;
+}
+.centro {
+    position: fixed;
+    bottom: 25px;
+    font-size: 25px; 
+}
+.salir {
+    position: fixed;
+    bottom: 25px;
+    left: 55%;
+}
+.facturar {
+    position: fixed;
+    bottom: 25px;
+    left: 35%;
+}
+.dobleIzquierda {
+    position: fixed;
+    bottom: 34%;
+    font-size: 35px;
+    left: 8%;
+    cursor: pointer;
+}
+.dobleDerecha {
+    position: fixed;
+    bottom: 34%;
+    font-size: 35px;
+    right: 1%;
+    cursor: pointer;
+}
+
+.encabezado {
+    color: red;
+    font-weight: bold;
+}
+.menu {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;
+}
+.posicionInicialBtn {
+    position: absolute;
+    top: 30px;
+    left: 13%;
+}
+.posicionSinMenu {
+    position: absolute;
+    top: 15px;
+    left: 1%;
+}
+.card-body {
+    padding: 0 !important;
+    padding-left: 2% !important;
+    padding-right: 2% !important;
+    padding-bottom: 2% !important;
+  }
+
+  .form-control {
+      background: white !important;
+  }
+
+
+/* background-color: rgba(0, 0, 0, 0.03); */
+/* border-bottom: 1px solid rgba(0, 0, 0, 0.125); */
+/* background: white; */
+/* border: 2px solid #0b86ca; */

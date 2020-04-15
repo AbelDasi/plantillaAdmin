@@ -1,0 +1,77 @@
+<div id="inicio" class="card">
+    <div class="card-body">
+        <div style="font-size: 25px;border-bottom:1px solid black;" class="card-title mt-3 mb-3">
+            Diluciones
+        </div>
+        <div class="mt-3" #celdaDiluciones>
+            <div class="row">
+                <div class="col-md-12">
+                    <dx-data-grid [ngStyle]="{'height':alturaReferencia}" id="gridContainer1"
+                        [dataSource]="listaDiluciones" [showColumnLines]="true" [showRowLines]="true"
+                        [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="false"
+                        [wordWrapEnabled]="true" [allowColumnReordering]="true" [columnAutoWidth]="true"
+                        [columnMinWidth]="100" (onRowPrepared)="onRowPrepared($event)"
+                        (onCellPrepared)="onCellPrepared($event)" (onToolbarPreparing)="onToolbarPreparing($event)"
+                        (onCellClick)="onCellClick($event)">
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="false"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                        <dxo-paging [enabled]="true" [pageSize]="40"></dxo-paging>
+                        <dxo-pager [showInfo]="true"></dxo-pager>
+                        <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+                        <dxo-group-panel [visible]="true"></dxo-group-panel>
+                        <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+                        <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                        <dxi-column [allowSorting]="true" dataField="nombre" caption="Nombre"></dxi-column>
+                        <dxi-column [allowSorting]="true" dataField="descripcion" caption="Descripcion"></dxi-column>
+                        <dxi-column [allowSorting]="true" dataField="oid" caption="Eliminar" cellTemplate="deleteFila"></dxi-column>
+                        <div (click)="elminarDilucion(data.data.oid)" *dxTemplate="let data of 'deleteFila'">
+                            <i style="color:red;" class="fas fa-trash"></i>
+                            <!-- <button class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>   -->
+                        </div>
+                        <dxo-summary>
+                            <dxi-total-item column="texto" summaryType="count">
+                            </dxi-total-item>
+                        </dxo-summary>
+                    </dx-data-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--POPUP CON EL FORMULARIO-->
+<dx-popup class="popup" [width]="auto" [height]="auto" [showTitle]="false" title="" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="popUpDiluciones">
+    <div *dxTemplate="let data of 'content'">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Dilucion</h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formularioDiluciones">
+                <div class="row">
+                    <div class="col-md-12 form-group mb-3">
+                        <label>Nombre</label>
+                        <input formControlName="Nombre" type="text" class="form-control" placeholder="Ponga el nombre">
+                    </div>
+                    <div class="col-md-12 form-group mb-3">
+                        <label>Descripción</label>
+                        <textarea formControlName="Descripcion" class="form-control" rows="5" ></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6 text-center">
+                <button [disabled]="formularioDiluciones.invalid" (click)="addDilucion(formularioDiluciones)"
+                    style="width: 120px !important;" type="submit" class="btn claseButon m-1">{{textoBoton}}</button>
+            </div>
+            <div class="col-md-6 text-center">
+                <button  (click)="popUpDiluciones = false;"
+                    style="width: 120px !important;" type="submit" class="btn btn-ligth m-1">Cancelar</button>
+            </div>
+        </div>
+         
+    </div>
+</dx-popup>

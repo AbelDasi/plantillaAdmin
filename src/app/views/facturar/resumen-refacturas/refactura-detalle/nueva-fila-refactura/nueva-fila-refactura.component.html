@@ -1,0 +1,77 @@
+<dx-popup class="popup card mb-4" [width]="800" [height]="600" [showTitle]="false" title="" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="facturacion.popUpFilaNueva">
+    <div *dxTemplate="let data of 'content'">
+        <!--  <app-resumen></app-resumen> -->
+
+        <div class="container">
+            <div class="text-center">
+                <h4 style="display: inline;;">Insertar Fila Nueva {{accion}}</h4>
+            </div>
+            <!---===== Print Area =======-->
+            <form (ngSubmit)="addFila(fNuevaFila)" #fNuevaFila="ngForm">
+                <div id="print-area">
+                    <div class="mt-3 mb-4 border-top"></div>
+
+                    <div class="row mb-5">
+                        <div *ngIf="accion === 'servicio'" class="col-md-4"><label for="">Codigo Solicitud</label>
+                            <dx-select-box [(value)]="nuevaFila.solicitud"
+                                name="oid_solicitud" [searchEnabled]="true" [dataSource]="lookupData"
+                                displayExpr="codigo" valueExpr="oid" [ngStyle]="{'width': '100%'}"></dx-select-box>
+                        </div>
+                        <div *ngIf="accion === 'concepto'" class="col-md-4"><label for="">Concepto Nuevo</label>
+                            <input type="text" class="form-control" [(ngModel)]="nuevaFila.servicio_nombre"
+                                name="servicio_nombre" required>
+                        </div>
+                        <div *ngIf="accion === 'servicio'" class="col-md-4"><label for="">Servicio Nuevo</label>
+                            <dx-select-box required (onValueChanged)="servicioCambia($event)" [searchEnabled]="true"
+                                name="servicio" [dataSource]="servicios" displayExpr="nombre" valueExpr="oid"
+                                [ngStyle]="{'width': '100%'}"></dx-select-box>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Descripción</label>
+                            <textarea required [(ngModel)]="nuevaFila.descripcion_facturacion" name="servicio_descripcion"
+                                class="form-control" placeholder="Descripción"></textarea>
+                        </div>
+                        <div *ngIf="accion === 'concepto'" class="col-md-4"><label for="">Observaciones</label>
+                            <textarea required [(ngModel)]="nuevaFila.observaciones" name="observaciones" class="form-control"
+                                placeholder="Observaciones"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-4"><label for="">Cantidad</label>
+                            <input id="numerico1" required (input)="calcularTotal()" type="number" class="form-control"
+                                [(ngModel)]="nuevaFila.cantidad" name="cantidad">
+                        </div>
+                        <div class="col-md-4"><label for="">Precio Unidad</label>
+                            <input id="numerico2" required (input)="calcularTotal()" type="number" class="form-control"
+                                [(ngModel)]="nuevaFila.precio_unidad" name="precio_unidad">
+                        </div>
+                        <div class="col-md-4"><label for="">Total (€)</label>
+                            <input type="number" readonly class="form-control" [(ngModel)]="nuevaFila.total"
+                                name="total">
+                        </div>
+                    </div>
+                   <!--  <div class="row mb-5">
+                        <div *ngIf="accion === 'servicio'" class="col-md-4"><label for="">Observaciones</label>
+                            <textarea required [(ngModel)]="nuevaFila.observaciones" name="observaciones" class="form-control"
+                                placeholder="Observaciones"></textarea>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="text-center">
+                    <button  type="submit" class="btn claseButon btn-lg ml-3 salir">Añadir servicio</button>
+                    <button (click)="facturacion.popUpFilaNueva = false;"
+                        class="btn btn-ligth btn-lg ml-3 salir">Salir</button>
+                </div>
+        
+        </form>
+
+    </div>
+
+
+        <!--==== / Print Area =====-->
+    </div>
+
+</dx-popup>
+

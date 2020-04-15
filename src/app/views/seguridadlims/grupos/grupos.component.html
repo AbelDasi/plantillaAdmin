@@ -1,0 +1,109 @@
+<div class="container">
+    <div class="row">
+            <div class="col-md-12 pb-3">
+                <button (click)="open(modalBasic, 'data')" style="float: right;" type="button" class="btn btn-primary btn-rounded m-1">Nuevo Grupo<i style="margin-left: 2px;" class="fas fa-plus"></i></button>
+            </div>
+          </div>
+<dx-data-grid
+              id="gridContainer" [columns]="columnas" [dataSource]="this._seguridad.grupos"
+              [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="true"
+              [allowColumnResizing]="true"
+              [wordWrapEnabled]="true">
+              <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+              <dxo-filter-row [visible]="true"></dxo-filter-row>
+              <dxo-header-filter [visible]="false"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="150" ></dxo-search-panel>
+              <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+              <dxo-pager [showInfo]="true"></dxo-pager>
+              <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+              <dxo-group-panel [visible]="true"></dxo-group-panel>
+              <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+              <dxo-state-storing [enabled]="false" type="sessionStorage" storageKey="id" [savingTimeout]="250"></dxo-state-storing>
+              <div *dxTemplate="let data of 'cellTemplateNombre'">
+                  <div style="cursor: pointer;text-decoration: underline;" (click)="mostrarUsuariosDeEstePermiso(data.data)">{{data.data.nombre}}</div>
+              </div>
+              <div *dxTemplate="let data of 'cellTemplateDelete'">
+                    <button style="cursor: pointer;margin-right: 5px;" (click)="open(modalBasic, data.data)" type="button" class="btn btn-success">
+                     Editar<i style="color: white;margin-left: 2px;" class="fas fa-edit"></i>
+                    </button>
+                    <button style="cursor: pointer;" (click)="eliminarUsuario(data.data.oid)" type="button" class="btn btn-danger">
+                     Eliminar<i style="color: white;margin-left: 2px;" class="fas fa-trash"></i>
+                    </button>
+              </div>
+    </dx-data-grid>
+</div>
+<dx-popup
+        class="popup"
+        [width]="600"
+        [height]="600"
+        [showTitle]="true"
+        title=""
+        [dragEnabled]="false"
+        [closeOnOutsideClick]="true"
+        [(visible)]="_seguridad.popUpGrupo">
+        <div *dxTemplate="let data of 'content'">
+           <div class="container">
+               <h6 class="text-center">{{_seguridad.grupo.nombre}}</h6>
+                <dx-scroll-view
+                [height]="500"
+                direction="both">
+                <table class="table table-striped">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Login</th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of _seguridad.grupoUsuarios; index as i">
+                            <th scope="row">{{i + 1}}</th>
+                            <td>{{item.nombre}}</td>
+                            <td>{{item.login}}</td>
+                            <td>
+                            <button style="cursor: pointer;margin-right: 5px;" type="button" class="btn btn-success">
+                             Editar<i style="color: white;margin-left: 2px;" class="fas fa-edit"></i>
+                            </button>
+                            </td>
+                            <td>
+                            <button style="cursor: pointer;" type="button" class="btn btn-danger">
+                             Eliminar<i style="color: white;margin-left: 2px;" class="fas fa-trash"></i>
+                            </button>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </dx-scroll-view>
+             
+           </div>
+        </div>
+    </dx-popup>
+    <ng-template #modalBasic let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-basic-title">Añadir un nuevo grupo</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="">Nombre</label>
+                  <input type="text" class="form-control" id="firstName" placeholder="Nombre del grupo">
+                </div>
+                <div class="form-group">
+                    <label for="">Descripción</label>
+                    <textarea 
+                    class="form-control" 
+                    placeholder="Descripción" 
+                    max-rows="4">
+                    </textarea>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark btn-rounded" (click)="modal.close('Save click')">Confirmar</button>
+            </div>
+          </ng-template>

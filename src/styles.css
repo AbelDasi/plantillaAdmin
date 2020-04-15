@@ -1,0 +1,50 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@fortawesome/fontawesome-free/css/all.css';
+.fa, .fas {
+    font-family: 'Font Awesome 5 Free' !important;
+    font-weight: 900;
+  }
+  .dx-datagrid-content .dx-datagrid-table .dx-row > td {
+    vertical-align: middle;
+  }
+  .claseButon {
+    background: #0B86CA;
+    color: white;
+  }
+  .dx-dropdownlist-popup-wrapper.dx-popup-wrapper .dx-overlay-content {
+    width: 300px !important;
+  }
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+  }
+
+  input[type=number] { -moz-appearance:textfield; }
+  .card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: white !important;
+    border-bottom: 0px !important;
+}
+div.card.ng-star-inserted {
+  border: 2px solid #0B86CA;
+  border-radius: 25px !important;
+  border-bottom: -5px !important;
+}
+
+ .card-body {
+  padding-top: 0;
+  /* padding-left: 2% !important; */
+  /* padding-right: 2% !important; */
+  /* padding-bottom: 2% !important; */
+} 
+.card-header {
+  padding: 0;
+  padding-left: 0.5%;
+}
+.dx-state-disabled .dx-texteditor-input {
+  opacity: 1;
+  color: black;
+  font-weight: bold;
+}

@@ -1,0 +1,118 @@
+<div id="celdaSolicitudes"  class="row" style="margin-right: 0px;margin-left: 0px; margin-bottom: 20px;">
+    <div class="col-md-12">
+      <dx-data-grid id="gridContainer1" [dataSource]="abonos" [showColumnLines]="true" [showRowLines]="true"
+      [showBorders]="true" [rowAlternationEnabled]="false" [hoverStateEnabled]="false" 
+      [wordWrapEnabled]="true" [allowColumnReordering]="true" [columnAutoWidth]="true"
+      [columnMinWidth]="100"
+      (onRowPrepared)="onRowPrepared($event)"
+      (onCellPrepared)="onCellPrepared($event)"
+      (onToolbarPreparing)="onToolbarPreparing($event)"
+      (onCellClick)="onCellClick($event)"
+      (onSelectionChanged)="onSelectionChanged($event)">
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-header-filter [visible]="false"></dxo-header-filter>
+      <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+      <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+      <dxo-pager [showInfo]="true"></dxo-pager>
+      <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+      <dxo-group-panel [visible]="true"></dxo-group-panel>
+      <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+      <dxo-load-panel [enabled]="false"></dxo-load-panel>
+      <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="codigo" caption="Número" alignment="center">
+      </dxi-column>
+      <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cliente" caption="Cliente" alignment="center"
+      cellTemplate="clienteCellTemplate">
+    <!--     <dxo-lookup [dataSource]="lookupData" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+          valueExpr="oid"></dxo-lookup> -->
+      </dxi-column>
+      <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cliente_facturar" caption="Cliente a facturar"
+        alignment="center" cellTemplate="clienteFacturarCellTemplate">
+    <!--     <dxo-lookup [dataSource]="lookupData1" pageLoadMode="nextButton" nextButtonText="More" displayExpr="nombre"
+          valueExpr="oid"></dxo-lookup> -->
+      </dxi-column>
+      <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_preabono" caption="Fecha Preabono"
+        cellTemplate="fechaEntregaPrevistaCellTemplate" alignment="center">
+      </dxi-column>
+      <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha" caption="Fecha Abono"
+      cellTemplate="fechaEntregaPrevista1CellTemplate" alignment="center">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="oid_anterior" caption="Refacturada"
+    cellTemplate="refacturadoCellTemplate" alignment="center">
+  </dxi-column>
+      
+      <div *dxTemplate="let data of 'clienteCellTemplate'">
+        {{devolverNombreCliente(data.data.cliente)}}
+      </div>
+      <div *dxTemplate="let data of 'clienteFacturarCellTemplate'">
+        {{devolverNombreClienteFacturar(data.data.clienteFacturar)}}
+      </div>
+      <div *dxTemplate="let data of 'fechaEntregaPrevistaCellTemplate'">
+        {{data.data.fechaPreabono | date: 'dd/MM/yyyy'}}
+      </div>
+      <div *dxTemplate="let data of 'fechaEntregaPrevista1CellTemplate'">
+        <div *ngIf="data.data.fecha !== null">
+          {{data.data.fecha | date: 'dd/MM/yyyy'}}
+        </div>
+        
+      </div>
+      <div *dxTemplate="let data of 'refacturadoCellTemplate'">
+        <div *ngIf="data.data.oidAnterior !== null" style="color: green;font-weight: bold;">
+          SI
+        </div>
+        
+      </div>
+      <dxo-summary>
+        <dxi-total-item column="codigo" summaryType="count">
+        </dxi-total-item>
+      </dxo-summary>
+    </dx-data-grid>
+    </div>
+  </div>
+  <dx-popup class="popup card mb-4" [width]="450" [height]="400" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popUpFactura">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <div class="text-center">
+        <h4 style="display: inline;;">Crear Abono</h4>
+      </div>
+      <!---===== Print Area =======-->
+      <form>
+        <dx-validation-group #val1>
+        <div id="print-area">
+          <div class="mt-3 mb-4 border-top"></div>
+
+          <div class="row mb-5">
+            <div class="col-md-12"><label for="">Cliente</label>
+              <dx-select-box (onValueChanged)="setearCfacturar()"  [(value)]="nuevoAbono.cliente" name="cliente" [searchEnabled]="true"
+                [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid" [ngStyle]="{'width': '100%'}">
+                <dx-validator>
+                  <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+              </dx-validator>
+              </dx-select-box>
+            </div>
+            <div class="col-md-12"><label for="">Cliente Facturar</label>
+              <dx-select-box  [(value)]="nuevoAbono.cliente_facturar" name="cliente_facturar" [searchEnabled]="true"
+                [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid" [ngStyle]="{'width': '100%'}">
+                <dx-validator>
+                  <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+              </dx-validator>
+              </dx-select-box>
+            </div>
+          </div>
+
+        </div>
+        <div class="text-center">
+          <button type="submit" (click)="addAbono()" class="btn claseButon btn-lg ml-3 salir">Crear Abono</button>
+          <button (click)="popUpFactura = false;" class="btn btn-ligth btn-lg ml-3 salir">Salir</button>
+        </div>
+      </dx-validation-group>
+      </form>
+
+    </div>
+
+
+    <!--==== / Print Area =====-->
+  </div>
+
+</dx-popup>

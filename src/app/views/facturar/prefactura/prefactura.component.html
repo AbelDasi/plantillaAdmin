@@ -1,0 +1,137 @@
+<!-- <div class="text-center">
+  <button (click)="verDetallesPrefactura()" class="btn btn-primary">Detalle prefactura</button>
+</div> -->
+<div id="celdaSolicitudes" #celdaSolicitudes>
+  <dx-data-grid [ngStyle]="{'height':alturaReferencia}" id="gridContainer1" [dataSource]="prefacturas"
+    [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="false"
+    [hoverStateEnabled]="false" [columnAutoWidth]="true"
+    [columnMinWidth]="100" [wordWrapEnabled]="true" [allowColumnReordering]="true"
+     (onSelectionChanged)="onSelectionChanged($event)" (onRowPrepared)="onRowPrepared($event)"
+    (onCellPrepared)="onCellPrepared($event)" (onToolbarPreparing)="onToolbarPreparing($event)">
+
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+    <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+    <dxo-pager [showInfo]="true"></dxo-pager>
+    <dxo-export [enabled]="true" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+    <dxo-load-panel [enabled]="false"></dxo-load-panel>
+    <dxo-selection mode="multiple">
+    </dxo-selection>
+
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="codigo" caption="Número" alignment="center">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="fecha_prefactura" caption="Fecha prefactura"
+    cellTemplate="fechaEntregaPrevistaCellTemplate" alignment="center">
+  </dxi-column>
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cliente" caption="Cliente" alignment="center"
+      cellTemplate="clienteCellTemplate">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="cliente_facturar" caption="Cliente a facturar"
+      alignment="center" cellTemplate="clienteFacturarCellTemplate">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="Pedido" alignment="center" dataField="pedido">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="Pedido Requerido" alignment="center" dataField="pedido_requerido">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="No Enviar Copía Impresa" alignment="center" dataField="no_enviar">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="Con Solicitud" alignment="center" dataField="asociado_solicitud">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="Unificada" alignment="center" dataField="unificada">
+    </dxi-column>
+    <dxi-column [allowEditing]="false" caption="Validado" alignment="center" dataField="validar" cellTemplate="validarCellTemplate">
+    </dxi-column>
+     <dxi-column [allowEditing]="false" caption="Cumple Requisitos" alignment="center" dataField="pedido"
+    cellTemplate="cumpleCellTemplate">
+    </dxi-column> 
+    <dxi-column [allowEditing]="false" [allowSorting]="true" dataField="total" caption="Importe" alignment="center"
+      cellTemplate="importeCellTemplate">
+    </dxi-column>
+    <div *dxTemplate="let data of 'clienteCellTemplate'">
+      {{devolverNombreCliente(data.data.cliente)}}
+    </div>
+    <div *dxTemplate="let data of 'clienteFacturarCellTemplate'">
+      {{devolverNombreClienteFacturar(data.data.cliente_facturar)}}
+    </div>
+    <div *dxTemplate="let data of 'fechaEntregaPrevistaCellTemplate'">
+      {{data.data.fecha_prefactura | date:'dd/MM/yyyy'}}
+    </div>
+    <div style="text-align: right;font-weight: bold;" *dxTemplate="let data of 'importeCellTemplate'">
+      {{data.data.cantidad === null ? 0: data.data.total | number: '1.2-2' :'es-ES' }} €
+    </div>
+    <div  *dxTemplate="let data of 'validarCellTemplate'">
+      <span *ngIf="data.data.validar" style="color: green;font-weight: bold;">V</span>
+      <span *ngIf="!data.data.validar" style="color: red; font-weight: bold;">X</span>
+    </div>
+     <div style="text-align: center; font-size: 20px;" *dxTemplate="let data of 'cumpleCellTemplate'">
+      <span *ngIf="!data.data.pedido_requerido"><i style="color:green" class="fas fa-thumbs-up"></i></span>
+      <span *ngIf="data.data.pedido_requerido && data.data.pedido !== null"><i style="color:green;" class="fas fa-thumbs-up"></i></span>
+      <span *ngIf="data.data.pedido_requerido && data.data.pedido === null"><i style="color: red;" class="fas fa-thumbs-down"></i></span>
+    </div>
+
+    <!-- <div style="text-align: center; font-size: 20px;" *dxTemplate="let data of 'unificarCellTemplate'">
+      <span *ngIf="data.data.unificar !== null && data.data.unificar"><i style="color:green;" class="fas fa-thumbs-up"></i></span>
+      <span *ngIf="data.data.unificar === null "><i style="color: red;" class="fas fa-thumbs-down"></i></span>
+      <span *ngIf="!data.data.unificar" style="color: red;">NO</span>
+    </div> -->
+    <dxo-summary>
+      <!--   <dxi-total-item column="codigo" summaryType="count">
+    </dxi-total-item> -->
+      <dxi-total-item column="codigo" summaryType="count">
+      </dxi-total-item>
+      <dxi-total-item column="cantidad" summaryType="sum" valueFormat="#,##0.##">
+      </dxi-total-item>
+    </dxo-summary>
+  </dx-data-grid>
+</div>
+
+<dx-popup class="popup card mb-4" [width]="450" [height]="400" [showTitle]="false" title="" [dragEnabled]="false"
+  [closeOnOutsideClick]="true" [(visible)]="popUpPrefactura">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container">
+      <div class="text-center">
+        <h4 style="display: inline;;">Crear Prefactura</h4>
+      </div>
+      <!---===== Print Area =======-->
+      <form (ngSubmit)="addPrefactura()">
+        <dx-validation-group #val1>
+        <div id="print-area">
+          <div class="mt-3 mb-4 border-top"></div>
+
+          <div class="row mb-5">
+            <div class="col-md-12"><label for="">Cliente</label>
+              <dx-select-box (onValueChanged)="setearCfacturar()"  [(value)]="nuevaPrefactura.cliente" name="cliente" [searchEnabled]="true"
+                [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid" [ngStyle]="{'width': '100%'}">
+                <dx-validator>
+                  <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+              </dx-validator>
+              </dx-select-box>
+            </div>
+            <div class="col-md-12"><label for="">Cliente Facturar</label>
+              <dx-select-box  [(value)]="nuevaPrefactura.cliente_facturar" name="cliente_facturar" [searchEnabled]="true"
+                [dataSource]="lookupData" displayExpr="nombre" valueExpr="oid" [ngStyle]="{'width': '100%'}">
+                <dx-validator>
+                  <dxi-validation-rule type="required" message="Nombre obligatorio"></dxi-validation-rule>
+              </dx-validator>
+              </dx-select-box>
+            </div>
+          </div>
+
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn claseButon btn-lg ml-3 salir">Crear Prefactura</button>
+          <button (click)="popUpPrefactura = false;" class="btn btn-ligth btn-lg ml-3 salir">Salir</button>
+        </div>
+      </dx-validation-group>
+      </form>
+
+    </div>
+
+
+    <!--==== / Print Area =====-->
+  </div>
+
+</dx-popup>
